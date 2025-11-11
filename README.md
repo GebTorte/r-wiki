@@ -14,7 +14,7 @@ git checkout -b <branch-name>
 ```bash
 git add .
 git commit -m "your message"
-git push
+git push origin <branch-name>
 ```
 - on `dev` branch, we will merge all remote changes. to prepare for this we need to
     1) update our local version to the state of the `dev` branch

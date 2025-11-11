@@ -47,3 +47,67 @@ df <- data.frame(a=x1, b=x2, c=x3, d=x4)
 ```{r point plot, eval=TRUE, echo=TRUE}
 ggplot(df, aes(a,b, color=c)) + geom_point(alpha=0.5) + labs(title="first plot", x="xaxis \n and new line")
 ```
+
+
+```{r hist plot, eval=TRUE, echo=TRUE}
+ggplot(df, aes(a)) + geom_histogram(color="white", binwidth = 1)
+```
+
+```{r density plot, eval=TRUE, echo=TRUE}
+ggplot(df, aes(a)) + geom_density()
+```
+
+```{r copmbined density plot, eval=TRUE, echo=TRUE}
+# combined
+ggplot(
+  df
+) + geom_histogram(
+  aes(a, after_stat(density), fill="blue", color="darkgrey")
+) + geom_density(
+  aes(a, after_stat(density)), colour="yellow" 
+) + geom_rug(aes(a))
+
+```
+
+
+
+```{r  stat plot, eval=TRUE, echo=TRUE}
+# plot just count statistics 
+ggplot(df, aes(c, color=c)) + geom_point(stat="count", size=4)
+
+```
+
+```{r  flipped bar plot, eval=TRUE, echo=TRUE}
+# flipped bar chart
+ggplot(df) + geom_bar(aes(c)) + coord_flip()
+
+```
+```{r  container bar plot, eval=TRUE, echo=TRUE}
+# container bar chart
+ggplot(df, aes(d, fill=c)) + geom_bar(position="dodge") + scale_fill_grey()
+
+```
+
+```{r  boxplot, eval=TRUE, echo=TRUE}
+# boxplot
+ggplot(df, aes(d, a)) + geom_boxplot() + geom_jitter(alpha=.5, width=.3, color="blue")
+
+```
+
+```{r  boxplot with continuous values, eval=TRUE, echo=TRUE}
+# boxplot with cut continuous values
+ggplot(
+  df, aes(a, b)
+) + geom_boxplot(
+  aes(group=cut_width(a, .5)), outlier.alpha=.1
+) + geom_jitter(
+  width=.02, size=0.7, alpha=.5, color="blue"
+)
+
+```
+
+```{r facet values, eval=TRUE, echo=TRUE}
+# facet plot
+ggplot(df, aes(c)) + geom_bar() + facet_grid(d ~ .)
+
+```

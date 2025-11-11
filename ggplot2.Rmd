@@ -1,0 +1,49 @@
+```
+title: "Wiki: ggplot2"
+author: "Simon Sacher"
+date: "Nov 4 2025"
+output:
+    html_document: default
+    pdf_document: default
+    word_document: default
+```
+
+
+```{r setup, eval=TRUE, echo =FALSE}
+Sys.setenv(R_LIBS_USER="~/R/library1")
+
+library("knitr")
+library("ggplot2")
+#knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Wiki: ggplot2
+
+```{r plot 1, eval=TRUE, echo=TRUE}
+#package("ggplot2")
+library(ggplot2)
+
+# open x11 session and plot text
+# Note: will close after execution
+x11()
+x <- data.frame(x=1, y=1, label="ggplot2 intro @ EAGLE")
+ggplot(data=x, aes(x=x, y=y)) + geom_text(aes(label=label), size=15)
+```
+
+```{r plot in html doc, eval=TRUE, echo=TRUE}
+x <- data.frame(x=1, y=1, label="ggplot2 intro @ EAGLE")
+ggplot(data=x, aes(x=x, y=y)) + geom_text(aes(label=label), size=15)
+``` 
+
+```{r dummy data, eval=TRUE, echo=TRUE}
+# creating dummy data
+x1 <- rnorm(1000, 0, 1)
+x2 <- rnorm(1000, 5, 10)
+x3 <- rep(c("catA", "catB", "catB", "catC", "catC", "catC"), 200)[1:1000]
+x4 <- factor(rep(c("yes", "no"), 500))
+df <- data.frame(a=x1, b=x2, c=x3, d=x4)
+```
+
+```{r point plot, eval=TRUE, echo=TRUE}
+ggplot(df, aes(a,b, color=c)) + geom_point(alpha=0.5) + labs(title="first plot", x="xaxis \n and new line")
+```

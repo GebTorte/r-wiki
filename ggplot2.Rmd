@@ -10,6 +10,7 @@ output:
 
 
 ```{r setup, eval=TRUE, echo =FALSE}
+# I have my R packages stored here:
 Sys.setenv(R_LIBS_USER="~/R/library1")
 
 library("knitr")
@@ -19,13 +20,17 @@ library("ggplot2")
 
 # Wiki: ggplot2
 
-```{r plot 1, eval=TRUE, echo=TRUE}
-#package("ggplot2")
+```{r plot x11, eval=TRUE, echo=TRUE}
 library(ggplot2)
 
-# open x11 session and plot text
-# Note: will close after execution
-x11()
+# open x11 interactive window session and plot ggplot output
+# Note: will close anyway after execution from Rmd
+# x11()
+``` 
+
+
+```{r plot 1, eval=TRUE, echo=TRUE}
+library(ggplot2)
 x <- data.frame(x=1, y=1, label="ggplot2 intro @ EAGLE")
 ggplot(data=x, aes(x=x, y=y)) + geom_text(aes(label=label), size=15)
 ```
@@ -44,6 +49,7 @@ x4 <- factor(rep(c("yes", "no"), 500))
 df <- data.frame(a=x1, b=x2, c=x3, d=x4)
 ```
 
+## All plots
 ```{r point plot, eval=TRUE, echo=TRUE}
 ggplot(df, aes(a,b, color=c)) + geom_point(alpha=0.5) + labs(title="first plot", x="xaxis \n and new line")
 ```
@@ -109,5 +115,119 @@ ggplot(
 ```{r facet values, eval=TRUE, echo=TRUE}
 # facet plot
 ggplot(df, aes(c)) + geom_bar() + facet_grid(d ~ .)
+
+```
+
+```{r 2d density, eval=TRUE, echo=TRUE}
+# 2d density
+ggplot(df, aes(a,b)) + geom_point(size=1) + geom_density2d()
+```
+
+### scatterplot with hexbins
+```{r hex, eval=TRUE, echo=TRUE}
+library(hexbin)
+# scatterplot with hexbins
+ggplot(df, aes(a,b)) + geom_hex(bins=30)
+```
+
+### adding regression line
+```{r regression line, eval=TRUE, echo=TRUE}
+# adding regression line
+ggplot(df, aes(a, b)) + geom_point() + geom_smooth(method=lm)
+```
+
+
+## Themes
+### storing a plot to var and plotting with theme
+```{r theme and storing a plot, eval=TRUE, echo=TRUE}
+a <- ggplot() + geom_point(data=df, aes(a, b, colour=c))
+
+a + theme_bw()
+```
+
+```{r custom themes, eval=FALSE, echo=TRUE}
+# custom theme - not working on my machine
+ggplot() + geom_point(data=df, aes(a, b, colour=c)) + facet_grid(a~b) + ggtitle(
+    "my chart"
+) + theme(
+    plot.title=element_text(angle=1, size=22, colour="hotpink")
+) + scale_colour_discrete(name="type")
+```
+
+### plotting with grey theme
+```{r theme grey, eval=TRUE, echo=TRUE}
+# same plot, grey theme
+a + theme_grey()
+```
+
+### theme methods
+```{r theme meths, eval=FALSE, echo=TRUE}
+
+theme_get()
+theme_set(theme_grey())
+theme_get()
+theme_set(theme_bw())
+
+# options: theme_light, theme_dark, theme_minimal, ...
+```
+
+
+## Steigerwald examples
+
+```{r load steigerwald data, eval=TRUE, echo=TRUE}
+#replace with your data path or load from remote
+#df <- read.csv("https://raw.githubusercontent.com/wegmann/R_data/master/Steigerwald_sample_points_all_data_subset_withNames.csv", sep=",")
+df <- read.csv("~/r-projects/intro_to_programming/data/Steigerwald.csv", sep=";")
+
+ggplot(df, aes(x=L8.ndvi, y=L8.savi)) + geom_point()
+
+# adding color fade and smoothed lines
+ggplot(df, aes(x=L8.ndvi, y=L8.savi, colour=SRTM)) + geom_point() + geom_smooth()
+
+# split by landcover class
+ggplot(df, aes(x=L8.ndvi, y=L8.savi, colour=SRTM)) + geom_point() + geom_smooth() + facet_wrap(~LCname)
+
+```
+
+### savi per landcover 
+```{r steigerwald plot SAVI, eval=TRUE, echo=TRUE}
+
+ggplot() + geom_point(data=df, aes(LCname, L8.savi, colour=SRTM))
+
+ggplot(df, aes(x=LCname, y=L8.savi)) + geom_boxplot(
+    alpha=.5
+) + geom_point(
+    aes(colour=SRTM), alpha=.7, size=1.5, position=position_jitter(width=0.25, height=0)
+)
+```
+
+### other examples
+```{r more examples, eval=TRUE, echo=TRUE}
+ggplot(df, aes(x=LCname, y=L8.savi, colour=SRTM)) + geom_jitter()
+
+ggplot(df, aes(x=LCname, y=L8.savi)) + geom_violin()
+
+ggplot(df, aes(x=TimeScan.NDVIavg, fill=LCname)) + geom_density(alpha=0.3)
+```
+
+### combine geometries
+```{r geom combined, eval=TRUE, echo=TRUE}
+ggplot(df, aes(x=LCname, y=L8.savi, colour=SRTM)) + geom_jitter(aes(alpha=SRTM, size=TimeScan.NDVIsd, colour=L8.ndvi)) + geom_boxplot(alpha=0.5)
+
+```
+
+```{r geom combined cover image, eval=TRUE, echo=TRUE}
+# cover image
+ggplot(df, aes(x=L8.ndvi, y=L8.savi)) + geom_point(aes(colour=LCname), size=2) + facet_grid(. ~ LCname)
+```
+
+### export as pdf_document
+
+```{r geom combined cover image to pdf, eval=TRUE, echo=TRUE}
+
+pdf("landcover_sv_L8savi_ndvi.pdf", width=12, height=4)
+ggplot(df, aes(x=L8.ndvi, y=L8.savi)) + geom_point(aes(colour=LCname), size=2) + facet_grid(. ~ LCname)
+
+dev.off()
 
 ```

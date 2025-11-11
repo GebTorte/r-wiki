@@ -1,22 +1,29 @@
 # R Wiki
 
 ## contributing
+- contact me, so I can add you as a collaborator on the repository.
+
 - Clone the repository to your local machine
 - dont forget to fetch remote status before actions by running
 >git fetch 
 
+### creating your own workspace
 - create a new branch
+
 ```bash
 git checkout -b <branch-name>
 ```
+
 - work there
 - push changes to github
+
 ```bash
 git add .
 git commit -m "your message"
 git push origin <branch-name>
 git branch --set-upstream-to origin/<branch-name>
 ```
+
 - on `dev` branch, we will merge all remote changes. to prepare for this we need to
     1) update our local version to the state of the `dev` branch
     2) integrate the changes (so that we dont lose the newest/correct version) in the merge editor

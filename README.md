@@ -30,11 +30,11 @@ git branch --set-upstream-to origin/<branch-name>
     3) upload the changes 
 ```bash
 # 1
-git merge -no-ff dev
+git merge --no-ff dev
 
 # 2 do the merging
 
-# 3 then upload the new version
+# 3 then upload the new version (add all changes with ., commit with message, push)
 git add .
 git commit -m "your merge message"
 git push
